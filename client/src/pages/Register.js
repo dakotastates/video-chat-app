@@ -31,7 +31,14 @@ const Register = () =>{
       }
     );
     const parseRes = await response.json();
-  console.log(parseRes)
+
+    if (parseRes.token) {
+        localStorage.setItem("token", parseRes.token);
+        console.log('set token', parseRes.token)
+      } else {
+        console.log('no token')
+      }
+
 
   } catch (err) {
     console.error(err.message)
