@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Link} from "react-router-dom";
 
-const Register = () =>{
+const Register = (props) =>{
 
   const [inputs, setInputs] = useState({
     email: "",
@@ -34,9 +34,10 @@ const Register = () =>{
 
     if (parseRes.token) {
         localStorage.setItem("token", parseRes.token);
-        console.log('set token', parseRes.token)
+        props.setAuth(true)
       } else {
-        console.log('no token')
+
+        props.setAuth(false);
       }
 
 

@@ -4,6 +4,7 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
+  Redirect
 } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -13,6 +14,12 @@ import Join from "./pages/Join";
 
 function App() {
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const setAuth = boolean => {
+    setIsAuthenticated(boolean);
+  };
+
   return (
     <div className="App">
     <Router>
@@ -20,12 +27,25 @@ function App() {
         <Route
           exact
           path="/login"
-          component={Login}
+          render={props =>
+            !isAuthenticated ? (
+              <Login {...props} setAuth={setAuth} />
+            ) : (
+              <Redirect to="/" />
+            )
+          }
         />
+
         <Route
           exact
           path="/register"
-          component={Register}
+          render={props =>
+            !isAuthenticated ? (
+              <Register {...props} setAuth={setAuth} />
+            ) : (
+              <Redirect to="/" />
+            )
+          }
         />
 
         <Route
@@ -37,7 +57,13 @@ function App() {
         <Route
           exact
           path="/"
-          component={Home}
+          render={props =>
+            !isAuthenticated ? (
+              <Home {...props} setAuth={setAuth} />
+            ) : (
+              <Dashboard {...props} setAuth={setAuth} />
+            )
+          }
         />
 
       </Switch>

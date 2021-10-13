@@ -13,9 +13,26 @@ const Login = ({ setAuth }) => {
   const onChange = e =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
 
-  const onSubmitForm =  e => {
+  const onSubmitForm = async e => {
     e.preventDefault();
-    console.log('Login Clicked', email, password)
+    try {
+      const body = { email, password };
+      const response = await fetch(
+        "http://localhost:4000/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify(body)
+        }
+      );
+
+      const parseRes = await response.json();
+      console.log(parseRes)
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
   return (
