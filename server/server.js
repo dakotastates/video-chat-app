@@ -10,8 +10,15 @@ app.use(cors());
 
 app.use(express.json());
 
+// routes
+
 app.get('/', (reg, res) => {
   res.send('Server is Running!');
 })
+
+// register and login routes
+app.use('/auth', require('./routes/login'));
+
+
 
 server.listen(PORT, ()=> console.log(`Server listening on port ${PORT}`))

@@ -16,9 +16,26 @@ const Register = () =>{
     setInputs({...inputs, [e.target.name]: e.target.value})
   }
 
-  const onSubmitForm = (e) =>{
+  const onSubmitForm = async e =>{
     e.preventDefault()
-    console.log('Register Clicked', email, password, name)
+    try {
+    const body = { email, password, name };
+    const response = await fetch(
+      "http://localhost:4000/auth/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify(body)
+      }
+    );
+    const parseRes = await response.json();
+  console.log(parseRes)
+
+  } catch (err) {
+    console.error(err.message)
+  }
   }
 
   return (
