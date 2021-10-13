@@ -2,6 +2,8 @@ const router = require('express').Router();
 const pool = require("../db");
 const bcrypt = require('bcrypt')
 const jwtGenerator = require('../utils/jwtGenerator')
+const authorization = require('../middleware/authorization')
+
 
 
 // registering
@@ -82,6 +84,17 @@ router.post('/login', async(req, res) =>{
 
   } catch (e) {
     console.error(e.message)
+    res.status(500).send('Server Error');
+  }
+})
+
+// Verify/Persisted State
+
+router.get('/verify', authorization, async(req, res) =>{
+  try {
+    res.json(true);
+  } catch (e) {
+    console.error(e.message);
     res.status(500).send('Server Error');
   }
 })

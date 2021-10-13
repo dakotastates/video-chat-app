@@ -20,6 +20,25 @@ function App() {
     setIsAuthenticated(boolean);
   };
 
+  const checkAuthenticated = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/auth/verify", {
+        method: "GET",
+        headers: { token: localStorage.token }
+      });
+
+      const parseRes = await res.json();
+      console.log(parseRes)
+      parseRes === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    checkAuthenticated();
+  }, []);
+
   return (
     <div className="App">
     <Router>
