@@ -3,18 +3,17 @@ const pool = require("../db");
 const bcrypt = require('bcrypt')
 const jwtGenerator = require('../utils/jwtGenerator')
 const authorization = require('../middleware/authorization')
-
+const validate = require('../middleware/valid')
 
 
 // registering
 
-router.post('/register', async(req, res) =>{
+router.post('/register', validate ,async(req, res) =>{
 
   try {
     // 1. destructure the req.body (name, email, password)
 
     const { name, email, password } = req.body;
-
 
     // 2. Check if users exists (If users exists throw error)
 
@@ -52,7 +51,7 @@ router.post('/register', async(req, res) =>{
 
 // Login Route
 
-router.post('/login', async(req, res) =>{
+router.post('/login', validate ,async(req, res) =>{
   try {
     // 1. destructure the res.body
 
