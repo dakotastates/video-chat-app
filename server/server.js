@@ -19,6 +19,9 @@ app.get('/', (reg, res) => {
 // register and login routes
 app.use('/auth', require('./routes/login'));
 
+// Dashboard Route
+app.use('/dashboard', require('./routes/dashboard'));
+
 
 
 server.listen(PORT, ()=> console.log(`Server listening on port ${PORT}`))

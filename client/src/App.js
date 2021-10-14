@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Join from "./pages/Join";
 
+
 function App() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
