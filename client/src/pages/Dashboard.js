@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import '../styles/Dashboard.css';
 import Nav from '../components/Nav'
 import Clock from '../components/Clock'
+import { v1 as uuid } from "uuid";
 
 
 
@@ -10,6 +11,11 @@ const Dashboard = (props) => {
     id: "",
     name: ""
   });
+
+  const createRoom = ()=>{
+    const id = uuid();
+    props.history.push(`/room/${id}`);
+  }
 
 
   const getProfile = async () => {
@@ -58,7 +64,7 @@ const Dashboard = (props) => {
           <div className="left-container">
             <div className="row no-gutters">
               <div className="col">
-                <div className='left-button'>
+                <div className='left-button' onClick={createRoom}>
                   <div className='button-image new-meeting'>
                     <i className="fas fa-video"></i>
                   </div>

@@ -11,6 +11,7 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Join from "./pages/Join";
+import Room from "./pages/Room";
 
 
 function App() {
@@ -44,6 +45,10 @@ function App() {
     <div className="App">
     <Router>
       <Switch>
+        <Route
+          path="/room/:roomID"
+          component={Room}
+        />
         <Route
           exact
           path="/login"
