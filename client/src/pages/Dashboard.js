@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import '../styles/Dashboard.css';
 import Nav from '../components/Nav'
+import Clock from '../components/Clock'
 
 
 
@@ -92,7 +93,16 @@ const Dashboard = (props) => {
             </div>
           </div>
         </div>
-        <div className="dash-right">Right</div>
+        <div className="dash-right">
+          <div className='right-container'>
+            <div className='clock-container'>
+              <Clock />
+            </div>
+            <div className='schedule-container'>
+              No upcoming meetings today
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
