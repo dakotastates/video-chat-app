@@ -53,7 +53,45 @@ const Dashboard = (props) => {
     <div className='dash-container'>
       <div className='dash-nav'><Nav name={state.name} /></div>
       <div className='dash-main-container'>
-        <div className="dash-left">Left</div>
+        <div className="dash-left">
+          <div className="left-container">
+            <div className="row no-gutters">
+              <div className="col">
+                <div className='left-button'>
+                  <div className='button-image new-meeting'>
+                    <i className="fas fa-video"></i>
+                  </div>
+                  <span>New Meeting</span>
+                </div>
+              </div>
+              <div className="col">
+                <div className='left-button'>
+                  <div className='button-image'>
+                    <i className="fas fa-plus"></i>
+                  </div>
+                  <span>Join</span>
+                </div>
+              </div>
+              <div className="w-100"></div>
+              <div className="col">
+                <div className='left-button'>
+                  <div className='button-image'>
+                    <i className="fas fa-calendar"></i>
+                  </div>
+                  <span>Schedule</span>
+                </div>
+              </div>
+              <div className="col">
+                <div className='left-button'>
+                  <div className='button-image'>
+                    <i className="fas fa-arrow-up"></i>
+                  </div>
+                  <span>Share Screen</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="dash-right">Right</div>
       </div>
 

@@ -7,7 +7,7 @@ const Nav = (props) => {
   return (
     <div className="navbar navbar-dark bg-transparent justify-content-between">
       <div className='nav-block'>
-        <a href="..." className="navbar-brand">Navbar</a>
+        <a href="..." className="navbar-brand">Video Chat App</a>
       </div>
 
       <div className='nav-block'>

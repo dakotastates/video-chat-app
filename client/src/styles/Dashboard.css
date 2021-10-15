@@ -5,11 +5,12 @@
 .dash-main-container{
   /* background-color: grey; */
   display: flex;
+  /* height: calc(100vh - 10vh); */
   height: 100vh;
 
 }
 
-.dropdown-menu{
+/* .dropdown-menu{
   background-color: #242324;
   height: auto;
   border: 1px solid darkgrey;
@@ -29,7 +30,7 @@
 
 .dropdown-item{
   color: white;
-}
+} */
 
 /* .nav-button{
   margin: 0;
@@ -48,12 +49,7 @@
   border-bottom: 1px solid black;
 }
 
-.dash-left{
-  /* background-color: blue; */
-  flex: 0.5;
-  display: flex;
-  flex-direction: column;
-}
+
 
 .dash-right{
   /* background-color: yellow; */
@@ -94,6 +90,66 @@
   -moz-border-radius: 50%;
 }
 
-.nav-dropdown-menu{
-  /* display: none; */
+/* Left Side */
+
+.dash-left{
+  /* background-color: blue; */
+  flex: 0.5;
+  display: flex;
+  flex-direction: column;
+}
+
+.left-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+.left-button{
+  /* background-color: blue; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.button-image{
+  background-color: blue;
+  border-radius: 35px;
+  width: 100px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  transition: 0.3s;
+}
+
+.new-meeting{
+  background-color: darkorange;
+}
+
+.button-image>i{
+  font-size: 50px;
+}
+
+.left-button>span{
+  padding-top: 10px;
+}
+
+.button-image:hover {
+  transform: translate(0, -10px);
+  box-shadow: 5px 10px black;
+}
+
+.no-gutters {
+  margin: 150px;
+
+  > .col,
+  > [class*="col-"] {
+    padding-right: 0;
+    padding-left: 0;
+  }
 }
