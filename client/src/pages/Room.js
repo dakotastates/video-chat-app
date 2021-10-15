@@ -2,6 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { io } from 'socket.io-client';
 import Peer from "simple-peer";
 import '../styles/Room.css';
+import VideoControls from '../components/VideoControls'
+import VideoPlayer from '../components/VideoPlayer'
+import Chat from '../components/Chat'
+import Participants from '../components/Participants'
 
 
 const videoConstraints = {
@@ -11,9 +15,12 @@ const videoConstraints = {
 
 const Room = (props) => {
   const [peers, setPeers] = useState([]);
+  const [toggleChat, setToggleChat] = useState(false)
+  const [toggleParticipants, setToggleParticipants] = useState(false)
 
   const socketRef = useRef();
   const peersRef = useRef([]);
+  const userVideo = useRef();
 
   const roomID = props.match.params.roomID;
 
@@ -21,10 +28,11 @@ const Room = (props) => {
       socketRef.current = io('http://localhost:4000');
 
       navigator.mediaDevices.getUserMedia({
-        video: videoConstraints,
+        video: true,
         audio: true
       })
       .then((stream) =>{
+        userVideo.current.srcObject = stream;
         // RoomID to Socket
         socketRef.current.emit("join-room", roomID);
         // Find All Users
@@ -91,48 +99,27 @@ const Room = (props) => {
 
   return (
     <div className='room-container'>
-      <div className="video-chat-container">
-        <div className='video-controls-container'>
-          <div className='video-container'>Video</div>
-          <div className='controls-container'>
-            <div className='controls-block'>
-              <div className='control-button'>
-                <i className="fas fa-microphone"></i>
-                <span>Mute</span>
-              </div>
-              <div className='control-button'>
-                <i className="fas fa-video"></i>
-                <span>Video</span>
-              </div>
-            </div>
-            <div className='controls-block'>
-              <div className='control-button'>
-                <i className="fas fa-user-friends"></i>
-                <span>Participants</span>
-              </div>
-              <div className='control-button'>
-                <i className="fas fa-comments"></i>
-                <span>Chat</span>
-              </div>
-            </div>
-            <div className='controls-block'>
-              <div className='control-button leave'>
-                <span>Leave</span>
-              </div>
-            </div>
-          </div>
+      <div className="video-chat-container" >
+        <div className='video-controls-container' >
+          <VideoPlayer userVideo={userVideo} />
+          <VideoControls
+            setToggleParticipants={setToggleParticipants}
+            toggleParticipants={toggleParticipants}
+            setToggleChat={setToggleChat}
+            toggleChat={toggleChat}
+          />
         </div>
-        <div className='chat-users-container'>Right</div>
+        { toggleParticipants || toggleChat ?
+          <div className='chat-users-container' >
+            {toggleParticipants ? <Participants /> : null}
+            {toggleChat ? <Chat /> : null}
+          </div>
+          :
+          null
+        }
       </div>
     </div>
   );
 };
 
 export default Room;
-
-
-// <div className='controls-container'>
-//   <div className='main-controls'>
-//     main controls
-//   </div>
-// </div>
