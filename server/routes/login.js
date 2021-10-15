@@ -56,7 +56,6 @@ router.post('/login', validate ,async(req, res) =>{
     // 1. destructure the res.body
 
     const {email, password} = req.body;
-    console.log(email, password)
 
     // 2. check if user doesn't exist  (if not throw error)
 

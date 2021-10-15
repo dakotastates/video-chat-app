@@ -52,7 +52,11 @@ io.on('connection', socket => {
 
     socket.emit("all users", usersInThisRoom);
     });
-    console.log("Users:", users)
+
+  socket.on("sending-signal", payload => {
+    io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
+  });
+
 });
 
 
