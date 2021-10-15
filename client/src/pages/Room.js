@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { io } from 'socket.io-client';
 import Peer from "simple-peer";
+import '../styles/Room.css';
 
 
 const videoConstraints = {
@@ -89,10 +90,49 @@ const Room = (props) => {
   }
 
   return (
-    <div>
-      Room
+    <div className='room-container'>
+      <div className="video-chat-container">
+        <div className='video-controls-container'>
+          <div className='video-container'>Video</div>
+          <div className='controls-container'>
+            <div className='controls-block'>
+              <div className='control-button'>
+                <i className="fas fa-microphone"></i>
+                <span>Mute</span>
+              </div>
+              <div className='control-button'>
+                <i className="fas fa-video"></i>
+                <span>Video</span>
+              </div>
+            </div>
+            <div className='controls-block'>
+              <div className='control-button'>
+                <i className="fas fa-user-friends"></i>
+                <span>Participants</span>
+              </div>
+              <div className='control-button'>
+                <i className="fas fa-comments"></i>
+                <span>Chat</span>
+              </div>
+            </div>
+            <div className='controls-block'>
+              <div className='control-button leave'>
+                <span>Leave</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='chat-users-container'>Right</div>
+      </div>
     </div>
   );
 };
 
 export default Room;
+
+
+// <div className='controls-container'>
+//   <div className='main-controls'>
+//     main controls
+//   </div>
+// </div>
