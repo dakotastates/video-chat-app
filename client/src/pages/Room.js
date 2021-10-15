@@ -24,7 +24,9 @@ const Room = (props) => {
         audio: true
       })
       .then((stream) =>{
+        // RoomID to Socket
         socketRef.current.emit("join-room", roomID);
+        // Find All Users
         socketRef.current.on("all users", users => {
           const peers = [];
             users.forEach(userID => {
@@ -37,6 +39,19 @@ const Room = (props) => {
             })
             setPeers(peers);
         })
+
+        // Listen for New Peers
+
+        socketRef.current.on("user joined", payload => {
+          console.log('user-joined', payload)
+          const peer = addPeer(payload.signal, payload.callerID, stream);
+          peersRef.current.push({
+              peerID: payload.callerID,
+              peer,
+          })
+
+          setPeers(users => [...users, peer]);
+        });
 
       }).catch(error => console.log(error))
 
@@ -54,6 +69,23 @@ const Room = (props) => {
     })
 
     return peer;
+  }
+
+  const addPeer = (incomingSignal, callerID, stream) =>{
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      stream,
+    })
+
+    peer.on("signal", signal => {
+      socketRef.current.emit("returning-signal", { signal, callerID })
+    })
+
+    peer.signal(incomingSignal);
+
+    return peer;
+
   }
 
   return (
