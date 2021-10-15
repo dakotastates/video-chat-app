@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { io } from 'socket.io-client';
+import Peer from "simple-peer";
 
 
 const videoConstraints = {
@@ -8,8 +9,11 @@ const videoConstraints = {
 };
 
 const Room = (props) => {
+  const [peers, setPeers] = useState([]);
 
   const socketRef = useRef();
+  const peersRef = useRef([]);
+
   const roomID = props.match.params.roomID;
 
   useEffect(()=>{
@@ -21,13 +25,32 @@ const Room = (props) => {
       })
       .then((stream) =>{
         socketRef.current.emit("join-room", roomID);
+        socketRef.current.on("all users", users => {
+          const peers = [];
+            users.forEach(userID => {
+              const peer = createPeer(userID, socketRef.current.id, stream);
+              peersRef.current.push({
+                  peerID: userID,
+                  peer,
+              })
+              peers.push(peer);
+            })
+            setPeers(peers);
+        })
 
       }).catch(error => console.log(error))
 
-
-
     }, []);
 
+  const createPeer = (userToSignal, callerID, stream) =>{
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream,
+    });
+
+    return peer;
+  }
 
   return (
     <div>
