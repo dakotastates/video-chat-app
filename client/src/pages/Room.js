@@ -46,6 +46,7 @@ const Room = (props) => {
   const [peers, setPeers] = useState([]);
   const [toggleChat, setToggleChat] = useState(false)
   const [toggleParticipants, setToggleParticipants] = useState(false)
+  const [stream, setStream] = useState(null)
 
   const socketRef = useRef();
   const peersRef = useRef([]);
@@ -61,6 +62,7 @@ const Room = (props) => {
         audio: true
       })
       .then((stream) =>{
+        setStream(stream)
         userVideo.current.srcObject = stream;
         // RoomID to Socket
         socketRef.current.emit("join-room", roomID);
@@ -137,6 +139,7 @@ const Room = (props) => {
         <div className='video-controls-container' >
           <VideoPlayer peers={peers} userVideo={userVideo} />
           <VideoControls
+            stream={stream}
             setToggleParticipants={setToggleParticipants}
             toggleParticipants={toggleParticipants}
             setToggleChat={setToggleChat}
