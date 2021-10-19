@@ -6,7 +6,36 @@ import VideoControls from '../components/VideoControls'
 import VideoPlayer from '../components/VideoPlayer'
 import Chat from '../components/Chat'
 import Participants from '../components/Participants'
+import styled from "styled-components";
 
+
+// const Container = styled.div`
+//     padding: 20px;
+//     display: flex;
+//     height: 100vh;
+//     width: 90%;
+//     margin: auto;
+//     flex-wrap: wrap;
+// `;
+
+// const StyledVideo = styled.video`
+//     height: 40%;
+//     width: 50%;
+// `;
+
+// const Video = (props) => {
+//     const ref = useRef();
+//
+//     useEffect(() => {
+//         props.peer.on("stream", stream => {
+//             ref.current.srcObject = stream;
+//         })
+//     }, []);
+//     debugger
+//     return (
+//         <StyledVideo playsInline autoPlay ref={ref} />
+//     );
+// }
 
 const videoConstraints = {
     height: window.innerHeight / 2,
@@ -52,7 +81,7 @@ const Room = (props) => {
         // Listen for New Peers
 
         socketRef.current.on("user joined", payload => {
-          console.log('user-joined', payload)
+          console.log('user joined', payload)
           const peer = addPeer(payload.signal, payload.callerID, stream);
           peersRef.current.push({
               peerID: payload.callerID,
@@ -60,6 +89,11 @@ const Room = (props) => {
           })
 
           setPeers(users => [...users, peer]);
+        });
+
+        socketRef.current.on("receiving returned signal", payload => {
+          const item = peersRef.current.find(p => p.peerID === payload.id);
+          item.peer.signal(payload.signal);
         });
 
       }).catch(error => console.log(error))
@@ -74,7 +108,7 @@ const Room = (props) => {
     });
 
     peer.on("signal", signal => {
-      socketRef.current.emit("sending-signal", { userToSignal, callerID, signal })
+      socketRef.current.emit("sending signal", { userToSignal, callerID, signal })
     })
 
     return peer;
@@ -88,7 +122,7 @@ const Room = (props) => {
     })
 
     peer.on("signal", signal => {
-      socketRef.current.emit("returning-signal", { signal, callerID })
+      socketRef.current.emit("returning signal", { signal, callerID })
     })
 
     peer.signal(incomingSignal);
@@ -101,7 +135,7 @@ const Room = (props) => {
     <div className='room-container'>
       <div className="video-chat-container" >
         <div className='video-controls-container' >
-          <VideoPlayer userVideo={userVideo} />
+          <VideoPlayer peers={peers} userVideo={userVideo} />
           <VideoControls
             setToggleParticipants={setToggleParticipants}
             toggleParticipants={toggleParticipants}
@@ -123,3 +157,13 @@ const Room = (props) => {
 };
 
 export default Room;
+
+
+// <Container>
+//     <StyledVideo muted ref={userVideo} autoPlay playsInline />
+//     {peers.map((peer, index) => {
+//         return (
+//             <Video key={index} peer={peer} />
+//         );
+//     })}
+// </Container>
