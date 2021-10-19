@@ -49,14 +49,24 @@ const VideoControls = (props) => {
 
   }
 
-  const handleVideo = (e) =>{
+  const handleVideo = async(e) =>{
     e.preventDefault();
     // setToggleMute(!toggleMute)
     const enabled = props.stream.getVideoTracks()[0].enabled;
     if(enabled){
+      props.stream.getTracks().forEach(function(track) {
+        track.stop();
+      });
       props.stream.getVideoTracks()[0].enabled = false;
       setToggleVideo(false)
     }else{
+      let newVideoStreamGrab = await navigator.mediaDevices.getUserMedia({
+        video: true
+      })
+      props.stream.removeTrack(props.stream.getVideoTracks()[0])
+
+      props.stream.addTrack(newVideoStreamGrab.getVideoTracks()[0])
+      
       props.stream.getVideoTracks()[0].enabled = true;
       setToggleVideo(true)
     }
