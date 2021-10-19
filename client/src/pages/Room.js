@@ -139,6 +139,7 @@ const Room = (props) => {
         <div className='video-controls-container' >
           <VideoPlayer peers={peers} userVideo={userVideo} />
           <VideoControls
+            {...props}
             stream={stream}
             setToggleParticipants={setToggleParticipants}
             toggleParticipants={toggleParticipants}

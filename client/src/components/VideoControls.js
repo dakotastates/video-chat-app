@@ -51,7 +51,6 @@ const VideoControls = (props) => {
 
   const handleVideo = async(e) =>{
     e.preventDefault();
-    // setToggleMute(!toggleMute)
     const enabled = props.stream.getVideoTracks()[0].enabled;
     if(enabled){
       props.stream.getTracks().forEach(function(track) {
@@ -66,11 +65,18 @@ const VideoControls = (props) => {
       props.stream.removeTrack(props.stream.getVideoTracks()[0])
 
       props.stream.addTrack(newVideoStreamGrab.getVideoTracks()[0])
-      
+
       props.stream.getVideoTracks()[0].enabled = true;
       setToggleVideo(true)
     }
 
+  }
+
+  const endCall = () =>{
+    props.stream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    props.history.push(`/`);
   }
 
 
@@ -95,7 +101,7 @@ const VideoControls = (props) => {
         </div>
       </div>
       <div className='controls-block'>
-        <div className='control-button leave'>
+        <div className='control-button leave' onClick={endCall}>
           <span>Leave</span>
         </div>
       </div>
@@ -104,28 +110,3 @@ const VideoControls = (props) => {
 };
 
 export default VideoControls;
-
-
-// let mute;
-// if(true){
-//   mute =
-//   <div className='control-button'>
-//     <i className="fas fa-microphone"></i>
-//     <span>Mute</span>
-//   </div>
-// } else {
-//   mute =
-//   <div className='control-button'>
-//     <i className="fas fa-microphone"></i>
-//     <span>UnMute</span>
-//   </div>
-//
-// }
-
-
-
-// <i className="fas fa-microphone"></i>
-// <span>Mute</span>
-
-// <i className="fas fa-video"></i>
-// <span>Video</span>
