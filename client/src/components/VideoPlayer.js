@@ -1,35 +1,7 @@
 import React, { useEffect, useRef} from "react";
 
-// import styled from "styled-components";
 import Video from './Video';
 
-// const Container = styled.div`
-//     padding: 20px;
-//     display: flex;
-//     height: 100vh;
-//     width: 90%;
-//     margin: auto;
-//     flex-wrap: wrap;
-// `;
-
-// const StyledVideo = styled.video`
-//   height: 40%;
-//   width: 50%;
-// `;
-
-// const Video = (props) => {
-//   const ref = useRef();
-//
-//   useEffect(() => {
-//       props.peer.on("stream", stream => {
-//           ref.current.srcObject = stream;
-//       })
-//   }, []);
-//
-//   return (
-//       <StyledVideo playsInline autoPlay ref={ref} />
-//   );
-// }
 
 const VideoPlayer = (props) => {
 
@@ -41,9 +13,9 @@ const VideoPlayer = (props) => {
         <video muted playsInline ref={props.userVideo} autoPlay />
       </div>
 
-      {props.peers.map((peer, index) => {
+      {props.peers.map((peer) => {
           return (
-           <Video key={index} peer={peer} />
+           <Video key={peer.peerID} peer={peer.peer} />
           );
         })
       }

@@ -4,7 +4,8 @@ const Participants = (props) => {
 
   return (
     <div className='participants-container'>
-      Participants
+      <h4>Participants </h4>
+      {props.users.length > 0 ? 'users' : 'no users'}
     </div>
   );
 };

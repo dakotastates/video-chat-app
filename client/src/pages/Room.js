@@ -7,35 +7,8 @@ import VideoPlayer from '../components/VideoPlayer'
 import Chat from '../components/Chat'
 import Participants from '../components/Participants'
 import styled from "styled-components";
+import { v1 as uuid } from "uuid";
 
-
-// const Container = styled.div`
-//     padding: 20px;
-//     display: flex;
-//     height: 100vh;
-//     width: 90%;
-//     margin: auto;
-//     flex-wrap: wrap;
-// `;
-
-// const StyledVideo = styled.video`
-//     height: 40%;
-//     width: 50%;
-// `;
-
-// const Video = (props) => {
-//     const ref = useRef();
-//
-//     useEffect(() => {
-//         props.peer.on("stream", stream => {
-//             ref.current.srcObject = stream;
-//         })
-//     }, []);
-//     debugger
-//     return (
-//         <StyledVideo playsInline autoPlay ref={ref} />
-//     );
-// }
 
 const videoConstraints = {
     height: window.innerHeight / 2,
@@ -47,6 +20,8 @@ const Room = (props) => {
   const [toggleChat, setToggleChat] = useState(false)
   const [toggleParticipants, setToggleParticipants] = useState(false)
   const [stream, setStream] = useState(null)
+  const [users, setUsers] = useState([])
+  const [username, setUsername] = useState('Dakota')
 
   const socketRef = useRef();
   const peersRef = useRef([]);
@@ -54,8 +29,15 @@ const Room = (props) => {
 
   const roomID = props.match.params.roomID;
 
+  const generateUsername = () =>{
+    const id = uuid();
+    const name = `user-${id}`
+    setUsername(name)
+  }
+
   useEffect(()=>{
       socketRef.current = io('http://localhost:4000');
+      // generateUsername()
 
       navigator.mediaDevices.getUserMedia({
         video: true,
@@ -65,7 +47,7 @@ const Room = (props) => {
         setStream(stream)
         userVideo.current.srcObject = stream;
         // RoomID to Socket
-        socketRef.current.emit("join-room", roomID);
+        socketRef.current.emit("join-room", roomID, username);
         // Find All Users
         socketRef.current.on("all users", users => {
           const peers = [];
@@ -73,9 +55,13 @@ const Room = (props) => {
               const peer = createPeer(userID, socketRef.current.id, stream);
               peersRef.current.push({
                   peerID: userID,
-                  peer,
+                  peer
               })
-              peers.push(peer);
+              peers.push({
+                peerID : userID,
+                peer
+              });
+
             })
             setPeers(peers);
         })
@@ -87,22 +73,38 @@ const Room = (props) => {
           const peer = addPeer(payload.signal, payload.callerID, stream);
           peersRef.current.push({
               peerID: payload.callerID,
-              peer,
+              peer
           })
 
-          setPeers(users => [...users, peer]);
+          const peerObj = {
+            peer,
+            peerID: payload.callerID
+          }
+
+          setPeers(users => [...users, peerObj]);
         });
 
         socketRef.current.on("receiving returned signal", payload => {
           const item = peersRef.current.find(p => p.peerID === payload.id);
           item.peer.signal(payload.signal);
+          // item.peer.signal({signal: payload.signal, username: payload.username});
         });
+
+        socketRef.current.on('user left', id => {
+          const peerObj = peersRef.current.find(p => p.peerID === id);
+          if (peerObj) {
+            peerObj.peer.destroy();
+          }
+          const peers = peersRef.current.filter(p => p.peerId !== id);
+          peersRef.current = peers;
+          setPeers(peers);
+        })
 
       }).catch(error => console.log(error))
 
     }, []);
 
-  const createPeer = (userToSignal, callerID, stream) =>{
+  const createPeer = (userToSignal, callerID, stream, un) =>{
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -110,7 +112,7 @@ const Room = (props) => {
     });
 
     peer.on("signal", signal => {
-      socketRef.current.emit("sending signal", { userToSignal, callerID, signal })
+      socketRef.current.emit("sending signal", { userToSignal, callerID, signal, un })
     })
 
     return peer;
@@ -149,7 +151,7 @@ const Room = (props) => {
         </div>
         { toggleParticipants || toggleChat ?
           <div className='chat-users-container' >
-            {toggleParticipants ? <Participants /> : null}
+            {toggleParticipants ? <Participants users={users} /> : null}
             {toggleChat ? <Chat /> : null}
           </div>
           :
@@ -161,13 +163,3 @@ const Room = (props) => {
 };
 
 export default Room;
-
-
-// <Container>
-//     <StyledVideo muted ref={userVideo} autoPlay playsInline />
-//     {peers.map((peer, index) => {
-//         return (
-//             <Video key={index} peer={peer} />
-//         );
-//     })}
-// </Container>
