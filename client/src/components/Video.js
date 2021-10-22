@@ -11,9 +11,14 @@ const Video = (props) => {
 
   return (
     <div className='remote-video' >
-      <video playsInline autoPlay ref={ref} />
+      <video className='video' playsInline autoPlay ref={ref} />
     </div>
   );
 };
 
 export default Video;
+
+
+// <div className='remote-video' >
+//   <video playsInline autoPlay ref={ref} />
+// </div>

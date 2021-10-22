@@ -11,8 +11,9 @@ import { v1 as uuid } from "uuid";
 
 
 const videoConstraints = {
-    height: window.innerHeight / 2,
-    width: window.innerWidth / 2
+    height: window.innerHeight,
+    width: window.innerWidth,
+    aspectRatio: 1.777777778
 };
 
 const Room = (props) => {
@@ -40,7 +41,7 @@ const Room = (props) => {
       // generateUsername()
 
       navigator.mediaDevices.getUserMedia({
-        video: true,
+        video: videoConstraints,
         audio: true
       })
       .then((stream) =>{

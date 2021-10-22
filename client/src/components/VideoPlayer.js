@@ -8,23 +8,37 @@ const VideoPlayer = (props) => {
 
   return (
     <div className='video-container'>
+          <div className='my-video'>
+            <video className='video' muted playsInline ref={props.userVideo} autoPlay />
+          </div>
 
-      <div className='my-video'>
-        <video muted playsInline ref={props.userVideo} autoPlay />
-      </div>
+          {props.peers.map((peer) => {
+              return (
+               <Video key={peer.peerID} peer={peer.peer} />
+              );
+            })
+          }
 
-      {props.peers.map((peer) => {
-          return (
-           <Video key={peer.peerID} peer={peer.peer} />
-          );
-        })
-      }
     </div>
 
   );
 };
 
 export default VideoPlayer;
+
+
+
+
+      // <div className='my-video'>
+      //   <video muted playsInline ref={props.userVideo} autoPlay />
+      // </div>
+      //
+      // {props.peers.map((peer) => {
+      //     return (
+      //      <Video key={peer.peerID} peer={peer.peer} />
+      //     );
+      //   })
+      // }
 
 
 // <div className='video-container'>
@@ -38,3 +52,9 @@ export default VideoPlayer;
 //     }
 //
 // </div>
+
+
+
+// <div className='remote-video'>Remote Video 1</div>
+// <div className='remote-video'>Remote Video 2</div>
+// <div className='remote-video'>Remote Video 3</div>
