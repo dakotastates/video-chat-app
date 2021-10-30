@@ -5,6 +5,12 @@ const VideoControls = (props) => {
   const [toggleMute, setToggleMute] = useState(false)
   const [toggleVideo, setToggleVideo] = useState(true)
 
+  const videoConstraints = {
+      height: window.innerHeight,
+      width: window.innerWidth,
+      aspectRatio: 1.777777778
+  };
+
   let mute;
   if(toggleMute){
     mute =
@@ -60,7 +66,7 @@ const VideoControls = (props) => {
       setToggleVideo(false)
     }else{
       let newVideoStreamGrab = await navigator.mediaDevices.getUserMedia({
-        video: true
+        video: videoConstraints
       })
       props.stream.removeTrack(props.stream.getVideoTracks()[0])
 

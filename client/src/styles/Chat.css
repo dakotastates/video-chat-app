@@ -1,0 +1,42 @@
+.chat-container{
+  background-color: #242324;
+  border: solid black 1px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+
+}
+
+.messages-container{
+  background-color: #242324;
+  display: flex;
+  flex: 1;
+}
+
+.input-container{
+  /* border: solid black 1px; */
+  display: flex;
+
+  /* flex: 1; */
+}
+form{
+  display: flex;
+}
+button{
+  background-color: #242324;
+  color: white;
+  border: none;
+}
+
+input{
+  background-color: #242324;
+  color: white;
+  bottom: 0;
+  height: 40;
+  margin-right: 15;
+  padding: 10;
+  outline: none;
+  border: none;
+
+}

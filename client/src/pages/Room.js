@@ -21,8 +21,12 @@ const Room = (props) => {
   const [toggleChat, setToggleChat] = useState(false)
   const [toggleParticipants, setToggleParticipants] = useState(false)
   const [stream, setStream] = useState(null)
-  const [users, setUsers] = useState([])
+  const [participants, setParticipants] = useState([])
   const [username, setUsername] = useState('Dakota')
+
+  const [messages, setMessages] = useState()
+
+  // const [toggleVideo, setToggleVideo] = useState(true)
 
   const socketRef = useRef();
   const peersRef = useRef([]);
@@ -70,7 +74,7 @@ const Room = (props) => {
         // Listen for New Peers
 
         socketRef.current.on("user joined", payload => {
-          console.log('user joined', payload)
+          // console.log('user joined', payload)
           const peer = addPeer(payload.signal, payload.callerID, stream);
           peersRef.current.push({
               peerID: payload.callerID,
@@ -94,12 +98,26 @@ const Room = (props) => {
         socketRef.current.on('user left', id => {
           const peerObj = peersRef.current.find(p => p.peerID === id);
           if (peerObj) {
-            peerObj.peer.destroy();
+            peerObj.peer.destroy()
+
           }
-          const peers = peersRef.current.filter(p => p.peerId !== id);
+          const peers = peersRef.current.filter(p => p.peerID !== id);
           peersRef.current = peers;
           setPeers(peers);
         })
+
+        // Chat Messages
+
+        socketRef.current.on('messages', msgs =>{
+          setMessages(msgs);
+        })
+
+        // All participants
+
+        socketRef.current.on("participants", prts => {
+          setParticipants(prts)
+        })
+
 
       }).catch(error => console.log(error))
 
@@ -140,7 +158,10 @@ const Room = (props) => {
     <div className='room-container'>
       <div className="video-chat-container" >
         <div className='video-controls-container' >
-          <VideoPlayer peers={peers} userVideo={userVideo} />
+          <VideoPlayer
+            peers={peers}
+            userVideo={userVideo}
+          />
           <VideoControls
             {...props}
             stream={stream}
@@ -148,12 +169,20 @@ const Room = (props) => {
             toggleParticipants={toggleParticipants}
             setToggleChat={setToggleChat}
             toggleChat={toggleChat}
+
           />
         </div>
         { toggleParticipants || toggleChat ?
           <div className='chat-users-container' >
-            {toggleParticipants ? <Participants users={users} /> : null}
-            {toggleChat ? <Chat /> : null}
+            {toggleParticipants ? <Participants
+              participants={participants}
+            /> : null}
+            {toggleChat ? <Chat
+              socketRef={socketRef}
+              roomID={roomID}
+              username={username}
+              messages={messages}
+            /> : null}
           </div>
           :
           null

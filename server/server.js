@@ -32,11 +32,14 @@ app.use('/dashboard', require('./routes/dashboard'));
 // Web Socket
 
 const users = {};
+// urs=[]
+const messages = {};
 
 const socketToRoom = {};
 
 io.on('connection', (socket) => {
   socket.on('join-room', (roomID) =>{
+    // socket.join(roomID);
     if (users[roomID]) {
         const length = users[roomID].length;
         if (length === 4) {
@@ -49,11 +52,31 @@ io.on('connection', (socket) => {
         users[roomID] = [socket.id];
 
     }
+
     socketToRoom[socket.id] = roomID;
     const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
-
-    console.log(usersInThisRoom)
+    // urs.push(socket.id)
+    // console.log(usersInThisRoom)
     socket.emit("all users", usersInThisRoom);
+    // socket.to(roomID).emit("all users", urs);
+    io.emit("participants", users[roomID]);
+
+    // Creating Chat Messages
+
+    socket.on('message', payload =>{
+      const messageObj = {message: payload.message, username: payload.username}
+
+      if (messages[roomID]) {
+        messages[roomID].push(messageObj);
+      }else{
+        messages[roomID] = [messageObj];
+      }
+
+      console.log(messages[roomID])
+      // send back to room
+      // socket.emit('messages', payload.message)
+      io.emit('messages', messages[roomID])
+    })
 
   })
 
@@ -73,6 +96,8 @@ io.on('connection', (socket) => {
         users[roomID] = room;
     }
     socket.broadcast.emit('user left', socket.id);
+    // socket.emit('user left', socket.id);
+
   });
 })
 

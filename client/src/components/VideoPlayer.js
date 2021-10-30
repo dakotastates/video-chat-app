@@ -1,15 +1,15 @@
-import React, { useEffect, useRef} from "react";
+import React, { useEffect, useRef, useState} from "react";
 
 import Video from './Video';
 
 
 const VideoPlayer = (props) => {
 
-
   return (
     <div className='video-container'>
-          <div className='my-video'>
-            <video className='video' muted playsInline ref={props.userVideo} autoPlay />
+          <div className={props.peers.length === 0 ? 'my-video' : 'remote-video'}>
+            {true ? <video className='video' muted playsInline ref={props.userVideo} autoPlay /> : null}
+
           </div>
 
           {props.peers.map((peer) => {
