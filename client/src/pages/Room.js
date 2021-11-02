@@ -26,7 +26,7 @@ const Room = (props) => {
   const [toggleParticipants, setToggleParticipants] = useState(false)
   const [stream, setStream] = useState(null)
   const [participants, setParticipants] = useState([])
-  const [username, setUsername] = useState(location.state ? location.state.name : null)
+  const [username, setUsername] = useState(location.state ? location.state.name : `user-${uuid().substring(0,8)}`)
 
   const [messages, setMessages] = useState()
 
@@ -142,6 +142,7 @@ const Room = (props) => {
         })
 
 
+
       }).catch(error => console.log(error))
 
     }, []);
@@ -183,7 +184,7 @@ const Room = (props) => {
     // User Left
 
     socketRef.current.on('user left', id => {
-      console.log('participants left:', participants)
+      // console.log('participants left:', participants)
       const peerObj = peersRef.current.find(p => p.peerID === id);
       if (peerObj) {
         peerObj.peer.destroy()
@@ -204,8 +205,6 @@ const Room = (props) => {
 
     })
   }, [])
-
-  console.log('participants:', participants)
 
   return (
     <div className='room-container'>
@@ -235,6 +234,7 @@ const Room = (props) => {
               roomID={roomID}
               username={username}
               messages={messages}
+              toggleParticipants={toggleParticipants}
             /> : null}
           </div>
           :

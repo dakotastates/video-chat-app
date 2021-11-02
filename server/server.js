@@ -62,6 +62,7 @@ io.on('connection', (socket) => {
 
     socketToRoom[socket.id] = roomID;
     const usersInThisRoom = users[roomID].filter(user => user.id !== socket.id);
+
     // urs.push(socket.id)
     // console.log(usersInThisRoom)
     socket.emit("all users", usersInThisRoom);
@@ -71,7 +72,7 @@ io.on('connection', (socket) => {
     // Creating Chat Messages
 
     socket.on('message', payload =>{
-      const messageObj = {message: payload.message, username: payload.username}
+      const messageObj = {message: payload.message, username: payload.username, id: socket.id}
 
       if (messages[roomID]) {
         messages[roomID].push(messageObj);

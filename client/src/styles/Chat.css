@@ -5,13 +5,26 @@
   flex: 1;
   flex-direction: column;
   justify-content: space-between;
+  /* position: absolute; */
+  /* max-height: 100vh; */
+  /* overflow: auto; */
 
 }
 
 .messages-container{
   background-color: #242324;
+  /* background-color: green; */
   display: flex;
+  flex-direction: column;
   flex: 1;
+  max-height: 90vh;
+  overflow: scroll;
+  /* position: absolute; */
+  /* position: relative; */
+}
+
+.active{
+  max-height: 50vh;
 }
 
 .input-container{
@@ -39,4 +52,46 @@ input{
   outline: none;
   border: none;
 
+}
+
+
+.reciever{
+  padding: 15px;
+  background-color: #ECECEC;
+  align-self: flex-end;
+  border-radius: 20px;
+  margin-right: 15px;
+  margin-bottom: 20px;
+  max-width: 80%;
+  position: relative;
+}
+
+.recieverText{
+  color: black;
+  font-weight: 500;
+  margin-bottom: 10;
+}
+
+.sender{
+  padding: 15px;
+  background-color: #2B68E6;
+  align-self: flex-start;
+  border-radius: 20px;
+  margin: 15px;
+  max-width: 80%;
+  position: relative;
+}
+
+.senderName{
+  left: 10px;
+  padding-right: 10px;
+  font-size: 10px;
+  color: white;
+}
+
+.senderText{
+  color: white;
+  font-weight: 500px;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }

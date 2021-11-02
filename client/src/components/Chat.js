@@ -27,7 +27,7 @@ const Chat = (props) => {
         setInput({
           message: "",
           username: props.username,
-          roomID: props.roomID
+          // roomID: props.roomID
         })
 
         // props.socketRef.current.on("messages", messages => {
@@ -57,18 +57,26 @@ const Chat = (props) => {
   return (
     <div className='chat-container'>
       <h6>Chat </h6>
-      <div className='messages-container'>
-        <ul>
-          {props.messages ? props.messages.map((message) =>{
-            return (
-            <div>
-              <li>{message.message} - {message.username}</li>
+      <div className={props.toggleParticipants ? 'messages-container active' : 'messages-container'}>
+
+        {props.messages ? props.messages.map((message) => (
+          message.username === props.username ? (
+            <div className='reciever'>
+
+              <div className='recieverText'>{message.message}</div>
             </div>
-            )
-          })
-            : null
-          }
-        </ul>
+          ):(
+            <div className='sender'>
+
+              <div className='senderText'>{message.message}</div>
+              <div className='senderName'>{message.username}</div>
+            </div>
+          )
+        ))
+        :
+          null
+        }
+
       </div>
       <div className='input-container'>
         <form onSubmit={onCreateMessage}>
@@ -96,3 +104,61 @@ export default Chat;
 //   </div>
 // )
 // })}
+
+
+// {props.messages ? props.messages.map((message) =>{
+//   return (
+//   <div>
+//     <li>{message.message} - {message.username}</li>
+//   </div>
+//   )
+// })
+//   : null
+// }
+
+
+
+
+
+
+// {props.messages.map(({id, message}) => (
+//   message.id === props.currentUser.id ? (
+//     <div key={id} className='reciever'>
+//
+//       <div className='recieverText'>{message.message}</div>
+//     </div>
+//   ):(
+//     <div className='sender'>
+//
+//       <div className='senderText'>{message.message}</div>
+//       <div className='senderName'>{message.username}</div>
+//     </div>
+//   )
+// ))}
+
+
+
+
+
+
+// {props.messages ? props.messages.map((message) =>{
+//
+//   if (message.id === props.currentUser.id){
+//     return (
+//      <div>
+//       <li>{message.message} - {message.username} you</li>
+//      </div>
+//     )
+//   } else{
+//     return (
+//       <div>
+//        <li>{message.message} - {message.username} someone else</li>
+//       </div>
+//     )
+//   }
+//
+// })
+//   : null
+// }
+
+// <div className='messages-container'>
