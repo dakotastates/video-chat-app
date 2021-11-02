@@ -14,7 +14,10 @@ const Dashboard = (props) => {
 
   const createRoom = ()=>{
     const id = uuid();
-    props.history.push(`/room/${id}`);
+    props.history.push({
+      pathname: `/room/${id}`,
+      state: state
+    });
   }
 
 

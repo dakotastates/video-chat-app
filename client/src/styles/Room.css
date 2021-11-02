@@ -121,8 +121,20 @@
   background-color: #242324;
   border: solid black 1px;
   flex: 1;
+}
 
+.participant-list-item{
+  /* background-color: transparent; */
+  color: white;
+  display: flex;
+  /* padding: 5px 10px; */
+  padding: 5px;
+  /* justify-content: center; */
+  /* align-items: center; */
+}
 
+.participant-list-item:hover{
+  background-color: #424142;
 }
 
 

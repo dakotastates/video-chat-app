@@ -8,6 +8,8 @@ import Chat from '../components/Chat'
 import Participants from '../components/Participants'
 import styled from "styled-components";
 import { v1 as uuid } from "uuid";
+import { useLocation } from "react-router-dom";
+
 
 
 const videoConstraints = {
@@ -17,32 +19,58 @@ const videoConstraints = {
 };
 
 const Room = (props) => {
+  const location = useLocation();
+
   const [peers, setPeers] = useState([]);
   const [toggleChat, setToggleChat] = useState(false)
   const [toggleParticipants, setToggleParticipants] = useState(false)
   const [stream, setStream] = useState(null)
   const [participants, setParticipants] = useState([])
-  const [username, setUsername] = useState('Dakota')
+  const [username, setUsername] = useState(location.state ? location.state.name : null)
 
   const [messages, setMessages] = useState()
+
+
 
   // const [toggleVideo, setToggleVideo] = useState(true)
 
   const socketRef = useRef();
   const peersRef = useRef([]);
   const userVideo = useRef();
+  const participantsRef = useRef([]);
 
   const roomID = props.match.params.roomID;
 
-  const generateUsername = () =>{
-    const id = uuid();
-    const name = `user-${id}`
-    setUsername(name)
-  }
+
+  // const generateUsername = () =>{
+  //   // console.log(location.state)
+  //
+  //   let name;
+  //   if (location.state){
+  //    name = location.state.name
+  //  } else{
+  //    // name =
+  //    const id = uuid();
+  //    name = `user-${id}`
+  //  }
+  //   // debugger
+  //    setUsername(name)
+  //
+  //   // debugger
+  // }
+
+// debugger
+ //  useEffect(()=>{
+ //
+ //   // generateUsername()
+ //   // const name = location.state
+ //   // setUsername(username => ({ ...username, name }));
+ //   // console.log('username', username)
+ // },[])
+
 
   useEffect(()=>{
       socketRef.current = io('http://localhost:4000');
-      // generateUsername()
 
       navigator.mediaDevices.getUserMedia({
         video: videoConstraints,
@@ -56,14 +84,16 @@ const Room = (props) => {
         // Find All Users
         socketRef.current.on("all users", users => {
           const peers = [];
-            users.forEach(userID => {
-              const peer = createPeer(userID, socketRef.current.id, stream);
+            users.forEach(user => {
+              // debugger
+              // console.log(userID.id)
+              const peer = createPeer(user.id, socketRef.current.id, stream);
               peersRef.current.push({
-                  peerID: userID,
+                  peerID: user.id,
                   peer
               })
               peers.push({
-                peerID : userID,
+                peerID : user.id,
                 peer
               });
 
@@ -95,15 +125,14 @@ const Room = (props) => {
           // item.peer.signal({signal: payload.signal, username: payload.username});
         });
 
-        socketRef.current.on('user left', id => {
-          const peerObj = peersRef.current.find(p => p.peerID === id);
-          if (peerObj) {
-            peerObj.peer.destroy()
 
-          }
-          const peers = peersRef.current.filter(p => p.peerID !== id);
-          peersRef.current = peers;
-          setPeers(peers);
+        // // All participants
+
+        socketRef.current.on("participants", prts => {
+          // participantsRef.current.push(prts)
+          participantsRef.current = prts
+
+          setParticipants(prts)
         })
 
         // Chat Messages
@@ -112,16 +141,11 @@ const Room = (props) => {
           setMessages(msgs);
         })
 
-        // All participants
-
-        socketRef.current.on("participants", prts => {
-          setParticipants(prts)
-        })
-
 
       }).catch(error => console.log(error))
 
     }, []);
+
 
   const createPeer = (userToSignal, callerID, stream, un) =>{
     const peer = new Peer({
@@ -153,6 +177,35 @@ const Room = (props) => {
     return peer;
 
   }
+
+
+  useEffect(()=>{
+    // User Left
+
+    socketRef.current.on('user left', id => {
+      console.log('participants left:', participants)
+      const peerObj = peersRef.current.find(p => p.peerID === id);
+      if (peerObj) {
+        peerObj.peer.destroy()
+
+      }
+      const peers = peersRef.current.filter(p => p.peerID !== id);
+      peersRef.current = peers;
+      setPeers(peers);
+
+
+      // const prtcpnts = participantsRef.current[0].filter(p => p.id !== id);
+      const prtcpnts = participantsRef.current.filter(p => p.id !== id);
+
+      // console.log("participants", prtcpnts)
+      // console.log('after', participants)
+
+      setParticipants(prtcpnts);
+
+    })
+  }, [])
+
+  console.log('participants:', participants)
 
   return (
     <div className='room-container'>
