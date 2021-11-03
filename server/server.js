@@ -72,6 +72,10 @@ io.on('connection', (socket) => {
     // Creating Chat Messages
 
     socket.on('message', payload =>{
+
+      if(payload == null){
+        io.emit('messages', messages[roomID])
+      } else{
       const messageObj = {message: payload.message, username: payload.username, id: socket.id}
 
       if (messages[roomID]) {
@@ -84,6 +88,8 @@ io.on('connection', (socket) => {
       // send back to room
       // socket.emit('messages', payload.message)
       io.emit('messages', messages[roomID])
+
+      }
     })
 
   })

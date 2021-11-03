@@ -7,7 +7,7 @@ const Chat = (props) => {
     message: '',
     username: props.username,
   })
-  // const [messages, setMessages] = useState()
+  // const [messages, setMessages] = useState([])
 
   const { message, username } = input;
 
@@ -38,22 +38,11 @@ const Chat = (props) => {
       }
     };
 
-    // useEffect(()=>{
-    //   // props.socketRef.current.emit('message', 'message123' );
-    //   props.socketRef.current.on('messages', msgs =>{
-    //     console.log(msgs)
-    //     // debugger
-    //     // const msgObj={
-    //     //   message: msg.message,
-    //     //   username: msg.username
-    //     // }
-    //     // setMessages(messages => [...messages, msgs]);
-    //     setMessages(msgs);
-    //     // scrollToBottom()
-    //
-    //   })
-    // },[])
-    // console.log('messages', messages)
+    useEffect(()=>{
+      props.socketRef.current.emit('message', null )
+
+    },[])
+
   return (
     <div className='chat-container'>
       <h6>Chat </h6>

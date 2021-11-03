@@ -38,6 +38,7 @@ const Room = (props) => {
   const peersRef = useRef([]);
   const userVideo = useRef();
   const participantsRef = useRef([]);
+  const messagesRef = useRef([]);
 
   const roomID = props.match.params.roomID;
 
@@ -138,6 +139,7 @@ const Room = (props) => {
         // Chat Messages
 
         socketRef.current.on('messages', msgs =>{
+          messagesRef.current = msgs
           setMessages(msgs);
         })
 
